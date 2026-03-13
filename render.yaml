@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: demonodejs-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      # Cach 1 (khuyen nghi): dung 1 bien duy nhat
+      # Vi du: mysql://user:password@host:3306/dbname
+      - key: DB_URL
+        sync: false
+
+      # Bat SSL neu nha cung cap DB yeu cau (PlanetScale, Aiven, ...)
+      - key: DB_SSL
+        value: false
+
+      # Cach 2: dung tung bien rieng le (chi dung neu KHONG dung DB_URL)
+      # - key: DB_HOST
+      #   sync: false
+      # - key: DB_PORT
+      #   value: "3306"
+      # - key: DB_USER
+      #   sync: false
+      # - key: DB_PASSWORD
+      #   sync: false
+      # - key: DB_NAME
+      #   sync: false
