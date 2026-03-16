@@ -28,8 +28,7 @@ const buildConfigFromUrl = (connectionUrl) => {
             password: decodeURIComponent(parsed.password),
             database
         };
-    }
-    catch (error) {
+    } catch (error) {
         return {
             configError: `Invalid DB_URL: ${error.message}`
         };
@@ -85,8 +84,7 @@ const pingDatabase = async () => {
     try {
         await connection.ping();
         return true;
-    }
-    finally {
+    } finally {
         connection.release();
     }
 };

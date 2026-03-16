@@ -1,12 +1,15 @@
-const userUseCase = require('../use_cases/userUseCase');
+const getAllUsersUseCase = require('../usecase/getAllUsers.usecase');
+const getUserByIdUseCase = require('../usecase/getUserById.usecase');
+const createUserUseCase = require('../usecase/createUser.usecase');
+const updateUserUseCase = require('../usecase/updateUser.usecase');
+const deleteUserUseCase = require('../usecase/deleteUser.usecase');
 
 class UserController {
     async getAll(req, res) {
         try {
-            const users = await userUseCase.getAllUsers();
+            const users = await getAllUsersUseCase.execute();
             res.status(200).json(users);
-        }
-        catch (error) {
+        } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
         }
@@ -14,10 +17,9 @@ class UserController {
 
     async getById(req, res) {
         try {
-            const user = await userUseCase.getUserById(req.params.id);
+            const user = await getUserByIdUseCase.execute(req.params.id);
             res.status(200).json(user);
-        }
-        catch (error) {
+        } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
         }
@@ -25,11 +27,9 @@ class UserController {
 
     async create(req, res) {
         try {
-            const { name } = req.body;
-            const newUser = await userUseCase.createUser(name);
+            const newUser = await createUserUseCase.execute(req.body);
             res.status(201).json(newUser);
-        }
-        catch (error) {
+        } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
         }
@@ -37,11 +37,9 @@ class UserController {
 
     async update(req, res) {
         try {
-            const { name } = req.body;
-            const updateUser = await userUseCase.updateUser(req.params.id, name);
-            res.status(200).json(updateUser);
-        }
-        catch (error) {
+            const updatedUser = await updateUserUseCase.execute(req.params.id, req.body);
+            res.status(200).json(updatedUser);
+        } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
         }
@@ -49,13 +47,13 @@ class UserController {
 
     async delete(req, res) {
         try {
-            await userUseCase.deleteUser(req.params.id);
+            await deleteUserUseCase.execute(req.params.id);
             res.status(200).json({ message: 'Xoa User thanh cong!' });
-        }
-        catch (error) {
+        } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
         }
     }
 }
+
 module.exports = new UserController();

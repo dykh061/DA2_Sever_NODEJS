@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const userRouters = require('./routes/userRoute');
-const { pingDatabase, getDbStatus } = require('./config/db');
+const { pingDatabase, getDbStatus } = require('../config/database');
+const router = require('../routes/index');
+const errorMiddleware = require('../middleware/error.middleware');
 
 const app = express();
 
-app.use(cors()); //Dùng cors để cho phép FE gọi API thoải mái
-
-app.use(express.json()); //Đọc json từ body request
+app.use(cors());
+app.use(express.json());
 
 app.get('/', (req, res) => {
     res.status(200).json({
@@ -36,8 +36,7 @@ app.get('/health', async (req, res) => {
             database: 'connected',
             uptimeSeconds: Math.floor(process.uptime())
         });
-    }
-    catch (error) {
+    } catch (error) {
         return res.status(200).json({
             status: 'ok',
             database: 'unreachable',
@@ -47,11 +46,13 @@ app.get('/health', async (req, res) => {
     }
 });
 
-app.use('/users', userRouters);
+app.use('/', router);
 
 app.use((req, res) => {
     res.status(404).json({ error: 'Route not found' });
 });
+
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -1,7 +1,8 @@
-const db = require('../config/db');
-const User = require('../entities/User');
+const db = require('../../../config/database');
+const User = require('../domain/user.entity');
+const UserRepository = require('../domain/user.repository');
 
-class UserRepository {
+class UserRepositoryImpl extends UserRepository {
     async findAll() {
         const [rows] = await db.query('SELECT * FROM users');
         return rows.map((row) => new User(row.id, row.name));
@@ -28,4 +29,5 @@ class UserRepository {
         return true;
     }
 }
-module.exports = new UserRepository();
+
+module.exports = new UserRepositoryImpl();
