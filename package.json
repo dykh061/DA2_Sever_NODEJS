@@ -5,7 +5,7 @@
   "main": "cmd/server.js",
   "scripts": {
     "start": "node cmd/server.js",
-    "dev": "nodemon cmd/server.js"
+    "dev": "nodemon --watch cmd --watch config --watch routes --watch modules --watch common --watch middleware cmd/server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +15,11 @@
     "node": ">=18"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.19.0"
   },
   "devDependencies": {

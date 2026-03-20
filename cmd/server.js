@@ -4,6 +4,7 @@ require('dotenv').config();
 const { pingDatabase, getDbStatus } = require('../config/database');
 const router = require('../routes/index');
 const errorMiddleware = require('../middleware/error.middleware');
+const crypto = require('crypto');
 
 const app = express();
 
