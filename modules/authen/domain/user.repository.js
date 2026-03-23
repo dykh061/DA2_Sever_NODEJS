@@ -8,6 +8,9 @@ class UserRepository {
   async findEmail(email) {
     throw new Error("Not implemented");
   }
+  async checkRoleByRoleId(roleId) {
+    throw new Error("Not implemented");
+  }
 }
 
 module.exports = UserRepository;
