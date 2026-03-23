@@ -2,7 +2,6 @@ const { hashPassword } = require("../../../common/utils/hash");
 const { makeDefaultName } = require("../../../common/utils/makeDefaultName");
 const { conflict } = require("../../../common/errors/appError");
 const UserRegisterDTO = require("../dto/user.register.dto");
-
 class UserRegisterUseCase {
   // khoi tao use case voi user repository va token service
   constructor(userRepository, tokenService) {
@@ -29,7 +28,7 @@ class UserRegisterUseCase {
       password: hashedPassword,
       username: resolvedUsername,
     });
-
+    // neu dung thi tao token va tra ve
     const tokens = await this.tokenService.issueTokens({
       userId: createdUser.id,
       email: createdUser.email,

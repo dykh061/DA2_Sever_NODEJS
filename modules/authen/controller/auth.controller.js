@@ -1,9 +1,15 @@
 class AuthController {
   // khoi tao controller voi cac use case cua auth module
-  constructor({ registerUseCase, loginUseCase, logoutUseCase }) {
+  constructor({
+    registerUseCase,
+    loginUseCase,
+    logoutUseCase,
+    refreshTokenUseCase,
+  }) {
     this.registerUseCase = registerUseCase;
     this.loginUseCase = loginUseCase;
     this.logoutUseCase = logoutUseCase;
+    this.refreshTokenUseCase = refreshTokenUseCase;
   }
 
   // xu ly request dang nhap va tra ket qua cho client
@@ -20,6 +26,11 @@ class AuthController {
   async logout(req, res) {
     const userId = req.user.userId;
     const result = await this.logoutUseCase.execute({ userId });
+    return res.status(200).json(result);
+  }
+  async refreshToken(req, res) {
+    const { refreshToken } = req.body;
+    const result = await this.refreshTokenUseCase.execute(refreshToken);
     return res.status(200).json(result);
   }
 }

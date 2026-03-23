@@ -1,6 +1,7 @@
 const JwtSecurity = require("../common/security/jwt.security");
 const TokenServiceImpl = require("../modules/authen/infra/token.service.impl");
 const tokenRepository = require("../modules/authen/infra/token.repository.impl");
+const { unauthorized } = require("../common/errors/appError");
 const jwtSecur = new JwtSecurity();
 const tokenService = new TokenServiceImpl(tokenRepository, jwtSecur);
 
@@ -21,7 +22,7 @@ async function verifyToken(req, res, next) {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({ message: "Không có token truy cập" });
+      throw unauthorized("Khong co token truy cap");
     }
     const decoded = await tokenService.verifyAccessToken(token);
     req.user = decoded; // gắn thông tin user đã giải mã vào request để controller có thể sử dụng
@@ -29,6 +30,10 @@ async function verifyToken(req, res, next) {
 
     return next();
   } catch (error) {
+    console.error("[AUTH][VERIFY] failed", {
+      name: error.name,
+      message: error.message,
+    });
     return next(error);
   }
 }
