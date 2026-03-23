@@ -19,7 +19,25 @@ class UserRepoImpl extends UserRepository {
       [email],
     );
     if (rows.length === 0) return null;
-    return new User(rows[0]);
+    return new User({
+      id: rows[0].id,
+      email: rows[0].email,
+      password: rows[0].password,
+      username: rows[0].username,
+      roleId: rows[0].role_id,
+    });
+  }
+
+  // kiem tra xem role co ton tai trong bang roles hay khong
+  async checkRoleByRoleId(roleId) {
+    if (!roleId) return "user";
+
+    const [rows] = await db.query("SELECT * FROM roles WHERE id = ? LIMIT 1", [
+      roleId,
+    ]);
+
+    const roleName = rows[0]?.name;
+    return roleName === "admin" ? "admin" : "user";
   }
 }
 
