@@ -1,31 +1,25 @@
-const User = require('../modules/user/models/User'); // Đảm bảo đúng đường dẫn tới model User
+// middleware/checkRole.js
+const { unauthorized, forbidden } = require('../common/errors/appError');
 
-// Middleware kiểm tra quyền của người dùng
-const checkRole = async (req, res, next) => {
+async function checkRole(req, res, next) {
   try {
-    // Lấy userId từ req.user (đã được gán khi kiểm tra token)
-    const userId = req.user?.userId;
-    if (!userId) {
-      return res.status(401).json({ message: 'User not authenticated' });  // Dùng 401 cho lỗi xác thực
+    if (!req.user || !req.user.role) {
+      return next(
+        unauthorized('User chưa đăng nhập hoặc token không hợp lệ')
+      );
     }
 
-    // Tìm user trong database
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    // Kiểm tra role từ token
+    if (req.user.role !== 'admin') {
+      return next(
+        forbidden('Bạn không có quyền truy cập')
+      );
     }
 
-    // Kiểm tra role_id, nếu là admin thì tiếp tục
-    if (user.role_id !== 1) {  // 1 là admin
-      return res.status(403).json({ message: 'You do not have admin privileges' });
-    }
-
-    // Tiếp tục với middleware khác nếu là admin
     next();
   } catch (error) {
-    console.error(error);  // Log lỗi chi tiết để kiểm tra
-    res.status(500).json({ message: 'Server error' });
+    next(error);
   }
-};
+}
 
 module.exports = checkRole;

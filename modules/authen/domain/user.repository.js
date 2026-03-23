@@ -4,16 +4,6 @@ class UserRepository {
     throw new Error("Not implemented");
   }
 
-  // định nghĩa hợp đồng đăng nhập o tầng repository nếu cần
-  async login({ email, password }) {
-    throw new Error("Not implemented");
-  }
-
-  // định nghĩa hợp đồng logout o tầng repository nếu cần
-  async logout({ userId }) {
-    throw new Error("Not implemented");
-  }
-
   // định nghĩa hợp đồng tìm user theo email
   async findEmail(email) {
     throw new Error("Not implemented");

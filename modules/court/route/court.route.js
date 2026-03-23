@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const courtController = require('../controller/court.controller');
+const verifyToken = require('../../../middleware/verify.token');
+const checkRole = require('../../../middleware/checkRole');
 
-// const verifyToken = require('../../../middleware/verify.token');
-// const checkRole = require('../../../middleware/checkRole');
-// router.use(verifyToken, checkRole);
+router.use(verifyToken, checkRole);
 
 router.get('/', courtController.getAll);
 router.get('/:id', courtController.getById);

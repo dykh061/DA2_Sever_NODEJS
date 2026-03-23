@@ -1,10 +1,19 @@
 class Token {
   // dai dien du lieu token va key duoc su dung trong auth module
-  constructor({ userId, refreshToken, publicKey, privateKey }) {
+  constructor({
+    userId,
+    refreshTokenHash,
+    publicKey,
+    privateKey,
+    tokensUsed,
+    refreshExpiresAt,
+  }) {
     this.userId = userId;
-    this.refreshToken = refreshToken;
+    this.refreshTokenHash = refreshTokenHash;
     this.publicKey = publicKey;
     this.privateKey = privateKey;
+    this.tokensUsed = tokensUsed;
+    this.refreshExpiresAt = refreshExpiresAt;
   }
 }
 module.exports = Token;
