@@ -30,11 +30,13 @@ class UserLoginUseCase {
       throw unauthorized("Email hoac password khong dung");
     }
 
+    const userRole = await this.userRepository.checkRoleByRoleId(user.roleId);
+
     // neu dung thi tao token va tra ve
     const tokens = await this.tokenService.issueTokens({
       userId: user.id,
       email: user.email,
-      role: user.role || "user",
+      role: userRole,
     });
 
     return {
