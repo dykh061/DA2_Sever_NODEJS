@@ -12,16 +12,6 @@ class UserRepoImpl extends UserRepository {
     return new User({ id: result.insertId, email, password, username });
   }
 
-  // placeholder cho logic login neu can trien khai tai tang repository
-  async login({ email, password }) {
-    // TODO: Implement login logic
-  }
-
-  // placeholder cho logic logout neu can trien khai tai tang repository
-  async logout({ userId }) {
-    // TODO: Implement logout logic
-  }
-
   // tim user theo email de phuc vu dang ky va dang nhap
   async findEmail(email) {
     const [rows] = await db.query(

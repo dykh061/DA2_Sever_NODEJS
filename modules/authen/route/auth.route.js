@@ -22,5 +22,9 @@ router.post(
   asyncHandler(verifyToken),
   asyncHandler(authController.logout.bind(authController)),
 );
+router.post(
+  "/refresh",
+  asyncHandler(authController.refreshToken.bind(authController)),
+);
 
 module.exports = router;
