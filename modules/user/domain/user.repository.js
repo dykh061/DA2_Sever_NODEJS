@@ -6,7 +6,7 @@ class UserRepository {
     async findAll() { throw new Error('Not implemented'); }
     async findById(id) { throw new Error('Not implemented'); }
     async create(name) { throw new Error('Not implemented'); }
-    async update(id, name) { throw new Error('Not implemented'); }
+    async update(id, username,email,password, phone_number) { throw new Error('Not implemented'); }
     async delete(id) { throw new Error('Not implemented'); }
 }
 

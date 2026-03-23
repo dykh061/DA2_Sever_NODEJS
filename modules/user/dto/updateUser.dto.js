@@ -1,11 +1,15 @@
 const { createAppError } = require('../../../common/errors/appError');
 
 const validateUpdateUser = (body) => {
-    const { name } = body || {};
-    if (typeof name !== 'string' || !name.trim()) {
-        throw createAppError('Nhap dung ten', 400);
+    const { username , email, password, phone_number } = body || {};
+    if (typeof username !== 'string' || !username.trim()) {
+        throw createAppError('Nhap dung', 400);
     }
-    return { name: name.trim() };
+    return { username: username.trim(),
+            email : email?.trim(),
+            password,
+            phone_number: phone_number?.trim()
+     };
 };
 
 module.exports = { validateUpdateUser };
