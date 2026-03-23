@@ -1,10 +1,19 @@
-class Token{
-    constructor({userId, refreshToken }){
-        this.userId = userId;
-        this.refreshToken = refreshToken;
-    }
+class Token {
+  // dai dien du lieu token va key duoc su dung trong auth module
+  constructor({
+    userId,
+    refreshTokenHash,
+    publicKey,
+    privateKey,
+    tokensUsed,
+    refreshExpiresAt,
+  }) {
+    this.userId = userId;
+    this.refreshTokenHash = refreshTokenHash;
+    this.publicKey = publicKey;
+    this.privateKey = privateKey;
+    this.tokensUsed = tokensUsed;
+    this.refreshExpiresAt = refreshExpiresAt;
+  }
 }
 module.exports = Token;
-// sau này phát triển thêm để lưu refreshToken vào database, hoặc cache như redis để
-//  quản lý token tốt hơn, có thể revoke token khi cần thiết, hoặc lưu thông tin về thiết bị, IP,... 
-// để tăng cường bảo mật.
