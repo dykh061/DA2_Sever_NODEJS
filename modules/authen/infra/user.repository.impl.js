@@ -12,15 +12,19 @@ class UserRepoImpl extends UserRepository {
     return new User({ id: result.insertId, email, password, username });
   }
 
-  // tim user theo email de phuc vu dang ky va dang nhap
-  async findEmail(email) {
-    const [rows] = await db.query(
-      "SELECT * FROM users WHERE email = ? LIMIT 1",
-      [email],
-    );
-    if (rows.length === 0) return null;
-    return new User(rows[0]);
-  }
+    async login({ email, password }) {
+       // TODO: Implement login logic
+    }
+
+    async logout({ userId }) {
+        // TODO: Implement logout logic
+    }
+
+    async findEmail(email) {
+        const [rows] = await db.query('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
+        if (rows.length === 0) return null;
+        return new User(rows[0]);
+    }
 }
 
 module.exports = new UserRepoImpl();

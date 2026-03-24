@@ -25,8 +25,8 @@ async function verifyToken(req, res, next) {
       throw unauthorized("Khong co token truy cap");
     }
     const decoded = await tokenService.verifyAccessToken(token);
-    req.user = decoded; // gắn thông tin user đã giải mã vào request để controller có thể sử dụng
-    // cụ thể req.user sẽ có userId , email ,role , iat , exp
+
+    req.user = decoded;
 
     return next();
   } catch (error) {
