@@ -12,23 +12,23 @@ class BookingRepositoryImplement extends BookingRepository {
 
         const sql = `SELECT time_slot_id 
         FROM booking_details 
-        WHERE court_id = ? AND booking_id = ? AND time_lot_id IN (${placeHolders})
+        WHERE court_id = ? AND booking_date = ? AND time_slot_id IN (${placeHolders})
         `;
 
         const [rows] = await this.db.query(sql, [courtId, bookingDate, ...timeSlotIds])
 
-        return rows.map(row => row.timeSlotIds);
+        return rows.map(row => row.time_slot_id);
     }
 
     async getPricings(courtId, dayType, timeSlotIds) {
 
         const placeHolders = timeSlotIds.map(() => '?').join(',');
         const sql = `
-            SELECT time_lot_id, price
+            SELECT time_slot_id, price
             FROM pricings
             WHERE court_id = ?
                 AND day_type = ?
-                AND time_lot_id IN (${placeHolders})
+                AND time_slot_id IN (${placeHolders})
         `;
         const [rows] = await this.db.query(sql, [courtId, dayType, ...timeSlotIds]);
 
@@ -36,12 +36,12 @@ class BookingRepositoryImplement extends BookingRepository {
     }
 
     async createBookingTransaction(bookingEntity, totalAmount) {
-        const connection = await this.db.getConnection;
+        const connection = await this.db.getConnection();
         await connection.beginTransaction();
 
         try {
             const [bookingResult] = await connection.query(
-                `INSERT INTO bookings (user_id,status, type, created_at) VALUES (?,?,?)`,
+                `INSERT INTO bookings (user_id,status, type, created_at) VALUES (?,?,?,?)`,
                 [bookingEntity.userId, bookingEntity.status, bookingEntity.type, bookingEntity.createAt]
             );
 
@@ -49,9 +49,9 @@ class BookingRepositoryImplement extends BookingRepository {
 
             for (const detail of bookingEntity.details) {
                 await connection.query(
-                    `INSERT INTO booking_details (booking_id, time_lot_id, booking_date, price, court_id)
+                    `INSERT INTO booking_details (booking_id, time_slot_id, booking_date, price, court_id)
                     VALUES (?,?,?,?,?)`,
-                    [newBookingId, detail.timeSlotIds, detail.bookingDate, detail.price, detail.courtId]
+                    [newBookingId, detail.timeSlotId, detail.bookingDate, detail.price, detail.courtId]
                 );
             }
 
@@ -59,7 +59,7 @@ class BookingRepositoryImplement extends BookingRepository {
             await connection.query(
                 `INSERT INTO bills (booking_id,total_price,created_at,status)
                 VALUES (?,?,?,?)`,
-                [newBookingId, totalAmount, 'UNPAID', new Date()]
+                [newBookingId, totalAmount, new Date(), 'UNPAID']
             );
 
             await connection.commit();

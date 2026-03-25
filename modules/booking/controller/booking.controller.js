@@ -16,7 +16,7 @@ class BookingController {
             const dto = new CreateBookingDTO(payload);
             dto.validate();
             
-            const result = await this.createBookingUsecase.execyte(dto);
+            const result = await this.createBookingUsecase.execute(dto);
 
             return resizeBy.status(201).json({
                 success: true,
