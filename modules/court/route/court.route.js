@@ -4,10 +4,13 @@ const courtController = require('../controller/court.controller');
 const verifyToken = require('../../../middleware/verify.token');
 const checkRole = require('../../../middleware/checkRole');
 
-router.use(verifyToken, checkRole);
 
 router.get('/', courtController.getAll);
 router.get('/:id', courtController.getById);
+
+router.use(verifyToken, checkRole);
+
+
 router.post('/', courtController.create);
 router.put('/:id', courtController.update);
 router.delete('/:id', courtController.delete);
