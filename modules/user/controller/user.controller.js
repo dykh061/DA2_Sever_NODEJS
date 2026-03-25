@@ -4,6 +4,7 @@ const createUserUseCase = require('../usecase/createUser.usecase');
 const updateUserUseCase = require('../usecase/updateUser.usecase');
 const deleteUserUseCase = require('../usecase/deleteUser.usecase');
 
+
 class UserController {
     async getAll(req, res) {
         try {
@@ -35,13 +36,16 @@ class UserController {
         }
     }
 
-    async update(req, res) {
+    async update(req, res, next) {
         try {
-            const updatedUser = await updateUserUseCase.execute(req.params.id, req.body);
+            const myId = req.user.userId;
+            const updateData = req.body;
+            const currentUser = req.user; //Thong tin lay tu token
+
+            const updatedUser = await updateUserUseCase.execute(myId, updateData, currentUser);
             res.status(200).json(updatedUser);
         } catch (error) {
-            const statusCode = error.statusCode || 500;
-            res.status(statusCode).json({ error: error.message || 'Internal server error' });
+            next(error);
         }
     }
 
