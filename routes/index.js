@@ -9,6 +9,6 @@ const router = Router();
 router.use("/users", userRoute);
 router.use("/auth", authRoute);
 router.use("/courts", courtRoute);
-router.use("/booking",bookingRoute);
+router.use("/bookings",bookingRoute);
 
 module.exports = router;

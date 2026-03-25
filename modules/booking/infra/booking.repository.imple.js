@@ -2,6 +2,7 @@ const BookingRepository = require('../../../modules/booking/domain/booking.repos
 
 class BookingRepositoryImplement extends BookingRepository {
     constructor(db) {
+        super();
         this.db = db;
     }
     //Kiểm tra có bị trùng lịch

@@ -12,19 +12,33 @@ class UserRepoImpl extends UserRepository {
     return new User({ id: result.insertId, email, password, username });
   }
 
-    async login({ email, password }) {
-       // TODO: Implement login logic
-    }
+  // tim user theo email de phuc vu dang ky va dang nhap
+  async findEmail(email) {
+    const [rows] = await db.query(
+      "SELECT * FROM users WHERE email = ? LIMIT 1",
+      [email],
+    );
+    if (rows.length === 0) return null;
+    return new User({
+      id: rows[0].id,
+      email: rows[0].email,
+      password: rows[0].password,
+      username: rows[0].username,
+      roleId: rows[0].role_id,
+    });
+  }
 
-    async logout({ userId }) {
-        // TODO: Implement logout logic
-    }
+  // kiem tra xem role co ton tai trong bang roles hay khong
+  async checkRoleByRoleId(roleId) {
+    if (!roleId) return "user";
 
-    async findEmail(email) {
-        const [rows] = await db.query('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
-        if (rows.length === 0) return null;
-        return new User(rows[0]);
-    }
+    const [rows] = await db.query("SELECT * FROM roles WHERE id = ? LIMIT 1", [
+      roleId,
+    ]);
+
+    const roleName = rows[0]?.name;
+    return roleName === "admin" ? "admin" : "user";
+  }
 }
 
 module.exports = new UserRepoImpl();
