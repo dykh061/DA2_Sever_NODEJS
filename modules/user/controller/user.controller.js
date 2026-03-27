@@ -9,7 +9,15 @@ class UserController {
     async getAll(req, res) {
         try {
             const users = await getAllUsersUseCase.execute();
-            res.status(200).json(users);
+             const thongTinAnToan = users.map(user => {
+                const {password, ...safeInfo} = user;
+                return safeInfo;
+             })
+
+            res.status(200).json({
+                message: "Lấy thông tin an toàn!",
+                data: thongTinAnToan
+            });
         } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
@@ -18,8 +26,16 @@ class UserController {
 
     async getById(req, res) {
         try {
-            const user = await getUserByIdUseCase.execute(req.params.id);
-            res.status(200).json(user);
+            const myId = req.user.userId;
+            const currentUser = req.user;
+            const user = await getUserByIdUseCase.execute(myId, currentUser);
+
+            const { password, ...thongTinAnToan } = user
+
+            res.status(200).json({
+                message: "Lấy thông tin an toàn!",
+                data: thongTinAnToan
+            });
         } catch (error) {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ error: error.message || 'Internal server error' });
