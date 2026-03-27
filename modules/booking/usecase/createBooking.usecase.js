@@ -10,6 +10,18 @@ class CreateBookingUseCase {
 
     async execute(dto) {
         const { userId, courtId, bookingDate, timeSlotIds, type } = dto;
+        //B0 kiểm tra ngày đặt có âm và đã điền số điện thoại chưa
+        const userPhone = await this.bookingRepository.getUserPhoneNumber(userId);
+        if (!userPhone) {
+            throw badRequest("Bạn chưa có số điện thoại. Vui lòng vào trang cá nhân cập nhật số điện thoại trước khi đặt sân nhé!");
+        }
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const bookingDateObj = new Date(bookingDate);
+        if (bookingDateObj < today) {
+            throw badRequest("Không thể đặt sân trong quá khứ. Vui lòng chọn ngày từ hôm nay trở đi.");
+        }
 
         //B1 Kiểm tra trùng lịch
         const bookedSlots = await this.bookingRepository.checkAvailability(courtId, bookingDate, timeSlotIds);

@@ -20,6 +20,14 @@ class BookingRepositoryImplement extends BookingRepository {
         return rows.map(row => row.time_slot_id);
     }
 
+    async getUserPhoneNumber(userId) {
+        const sql = `SELECT phone_number FROM users WHERE id = ?`;
+        const [rows] = await this.db.query(sql, [userId]);
+        
+        if (rows.length === 0) return null;
+        return rows[0].phone_number;
+    }
+
     async getPricings(courtId, dayType, timeSlotIds) {
 
         const placeHolders = timeSlotIds.map(() => '?').join(',');
@@ -42,7 +50,7 @@ class BookingRepositoryImplement extends BookingRepository {
         try {
             const [bookingResult] = await connection.query(
                 `INSERT INTO bookings (user_id,status, type, created_at) VALUES (?,?,?,?)`,
-                [bookingEntity.userId, bookingEntity.status, bookingEntity.type, bookingEntity.createAt]
+                [bookingEntity.userId, bookingEntity.status, bookingEntity.type, bookingEntity.createdAt]
             );
 
             const newBookingId = bookingResult.insertId;

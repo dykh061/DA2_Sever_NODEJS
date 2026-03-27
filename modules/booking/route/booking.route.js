@@ -6,6 +6,6 @@ const { bookingController } = require('../container');
 
 router.use(verifyToken);
 
-router.post('/',bookingController.createBooking);
+router.post('/',verifyToken,bookingController.createBooking);
 
 module.exports = router;
