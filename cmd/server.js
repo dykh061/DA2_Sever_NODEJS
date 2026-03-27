@@ -4,7 +4,6 @@ require("dotenv").config();
 const { pingDatabase, getDbStatus } = require("../config/database");
 const router = require("../routes/index");
 const errorMiddleware = require("../middleware/error.middleware");
-const crypto = require("crypto");
 
 const app = express();
 
@@ -21,6 +20,14 @@ app.get("/", (req, res) => {
   res.status(200).json({
     service: "DemoNodejs API",
     status: "running",
+  });
+});
+
+app.get("/build", (req, res) => {
+  res.status(200).json({
+    service: process.env.RENDER_SERVICE_NAME || "DemoNodejs API",
+    branch: process.env.RENDER_GIT_BRANCH || "unknown",
+    commit: process.env.RENDER_GIT_COMMIT || "local",
   });
 });
 
