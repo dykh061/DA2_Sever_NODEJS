@@ -4,7 +4,7 @@ const UserRepository = require('../domain/user.repository');
 
 class UserRepositoryImpl extends UserRepository {
     async findAll() {
-        const [rows] = await db.query('SELECT * FROM users');
+        const [rows] = await db.query('SELECT u.*, r.name AS role_name FROM users u JOIN roles r On r.id = u.role_id');
         return rows.map((row) => new User(row.id, row.username, row.email,row.password,row.phone_number));
     }
 
