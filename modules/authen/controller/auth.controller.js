@@ -98,8 +98,11 @@ class AuthController {
 
   async refreshToken(req, res) {
     const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE_NAME];
+
+    // execute use case - nó sẽ throw error nếu token không hợp lệ
     const result = await this.refreshTokenUseCase.execute(refreshToken);
 
+    // set cookie refresh token mới (rotation)
     this.setRefreshTokenCookie(res, result.tokens.refreshToken);
 
     return res.status(200).json({
