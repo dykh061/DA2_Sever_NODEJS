@@ -134,8 +134,15 @@ const getDbStatus = () => {
   };
 };
 
+// Thêm hàm này để lấy 1 kết nối riêng biệt (dùng cho Transaction)
+const getConnection = async () => {
+  ensureConfigured();
+  return await pool.getConnection();
+};
+
 module.exports = {
   query,
   pingDatabase,
   getDbStatus,
+  getConnection
 };
