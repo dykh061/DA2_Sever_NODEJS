@@ -1,9 +1,12 @@
 services:
   - type: web
-    name: demonodejs-api
+    name: da2-sever-nodejs
     runtime: node
     plan: free
-    buildCommand: npm install
+    branch: main
+    autoDeploy: true
+    rootDir: .
+    buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /health
     envVars:
@@ -14,7 +17,7 @@ services:
 
       # Bat SSL neu nha cung cap DB yeu cau (PlanetScale, Aiven, ...)
       - key: DB_SSL
-        value: false
+        value: "false"
 
       # Cach 2: dung tung bien rieng le (chi dung neu KHONG dung DB_URL)
       # - key: DB_HOST
