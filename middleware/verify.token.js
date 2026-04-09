@@ -30,6 +30,17 @@ async function verifyToken(req, res, next) {
 
     return next();
   } catch (error) {
+    if (error?.name === "TokenExpiredError") {
+      return next(unauthorized("Phien dang nhap da het han"));
+    }
+
+    if (
+      error?.name === "JsonWebTokenError" ||
+      error?.name === "NotBeforeError"
+    ) {
+      return next(unauthorized("Token khong hop le"));
+    }
+
     console.error("[AUTH][VERIFY] failed", {
       name: error.name,
       message: error.message,
